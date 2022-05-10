@@ -39,10 +39,16 @@ export class Lexer {
     this.startIndex = this.currentIndex;
 
     switch (this.currentChar) {
-      case ":":
-        // need to return this imidiately so it dosen't accidentally skip over/consume another character
-        return this.variable();
-      // break;
+      case ":": {
+        const nextCharacter = this.source.charAt(this.currentIndex + 1);
+        // if the next charcter is not an alpha (meaning invalid varible declaration) throw error
+        if (!this.isAlpha(nextCharacter)) {
+          throw new Error(`Invalid ":" at line ${this.lineNumber}`);
+        } else {
+          // need to return this imediately so it dosen't accidentally skip over/consume another character
+          return this.variable();
+        }
+      }
       case ",":
         token = newToken(TokenType.COMMA, this.currentChar, this.lineNumber);
         break;
@@ -188,9 +194,6 @@ export class Lexer {
 
     // remove the ":" as it has no internal meaning... it is only needed in syntax
     const value = this.source.substring(this.startIndex + 1, this.currentIndex);
-    if (value.length === 0) { // this meaning it was just the ":" and there was no identifier at the end
-      throw new Error(`Invalid ":" at line ${this.lineNumber}`);
-    }
 
     return newToken(TokenType.VARIABLE, value, this.lineNumber);
   }
@@ -234,10 +237,14 @@ export class Lexer {
     this.consume(); // is this then needed?
 
     // strip out the quotes
-    const value = this.source.substring(this.startIndex + 1, this.currentIndex - 1);
+    const value = this.source.substring(
+      this.startIndex + 1,
+      this.currentIndex - 1,
+    );
     return newToken(TokenType.STRING, value, this.lineNumber);
   }
 
+  // migh move these mothods out of here
   private isAlpha(char: string) {
     return (
       (char >= "a" && char <= "z") ||
