@@ -4,31 +4,40 @@ export class Lexer {
   private source: string;
   // current examined character
   private currentChar = "";
-  // index of the current examined character (needed for more complex lexing in things like identifiers)
+  // index of the current examined character
   private currentIndex = 0;
+  // this represents the start index of a potential mulit character token (like and identifier or variable)
+  private startIndex = 0;
   // index of the next character
-  private nextIndex = 0;
   private lineNumber = 1;
 
   constructor(source: string) {
     this.source = source;
+
+    // if the sorce is empty (the only condition at this point where the length and the currentIndex will be the same)
+    if (this.source.length === 0) {
+      this.currentChar = "\0";
+    } else {
+      this.currentChar = this.source.charAt(this.currentIndex); // remember: currentIndex is 0 here
+    }
     // set up the first character
-    this.consume();
+    // this.consume();
     // console.log(this.currentChar.length)
 
     // handle empty source
   }
   public nextToken(): Token {
-
     // skip all whitespace before looking any further
     this.skipWhitespace();
+
     if (this.currentChar === "#") {
       this.skipComment();
     }
+
     let token: Token;
-    this.skipWhitespace();
-    // console.log(this.currentChar)
-    // console.log(this.isAtEnd())
+    // set the start index
+    this.startIndex = this.currentIndex;
+
     switch (this.currentChar) {
       case ":":
         // need to return this imidiately so it dosen't accidentally skip over/consume another character
@@ -38,28 +47,60 @@ export class Lexer {
         token = newToken(TokenType.COMMA, this.currentChar, this.lineNumber);
         break;
       case "(":
-        token = newToken(TokenType.LEFT_ROUND_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.LEFT_ROUND_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case ")":
-        token = newToken(TokenType.RIGHT_ROUND_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.RIGHT_ROUND_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case "{":
-        token = newToken(TokenType.LEFT_CURLY_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.LEFT_CURLY_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case "}":
-        token = newToken(TokenType.RIGHT_CURLY_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.RIGHT_CURLY_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case "[":
-        token = newToken(TokenType.LEFT_SQUARE_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.LEFT_SQUARE_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case "]":
-        token = newToken(TokenType.RIGHT_SQUARE_BRACKET, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.RIGHT_SQUARE_BRACKET,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case "=":
-        token = newToken(TokenType.EQUALS_OPERATOR, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.EQUALS_OPERATOR,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case ">":
-        token = newToken(TokenType.PREFIX_OPERATOR, this.currentChar, this.lineNumber);
+        token = newToken(
+          TokenType.PREFIX_OPERATOR,
+          this.currentChar,
+          this.lineNumber,
+        );
         break;
       case '"':
         token = this.string();
@@ -88,40 +129,19 @@ export class Lexer {
     return token;
   }
 
+  // sets up the next character to be examined
   private consume() {
+    // sets up the index for the next character
+    // this has be first as the first character is already read in the constructor
+    this.currentIndex++;
     // if there are no more tokens to read, set the current token to 0
-    if (this.nextIndex >= this.source.length) {
-      this.currentChar = "\0"; // think about this
+    if (this.currentIndex >= this.source.length) {
+      this.currentChar = "\0";
     } else {
-      // set the next token to be read
-      this.currentChar = this.source.charAt(this.nextIndex);
-    }
-    // setup the current index and next index as well
-    this.currentIndex = this.nextIndex;
-    this.nextIndex++;
-  }
-
-  // "peek" at the next avalible character
-  private peek() {
-    if (this.nextIndex >= this.source.length) {
-      return "\0"; // think about this
-    } else {
-      // get next token
-      return this.source.charAt(this.nextIndex);
+      // set the current char
+      this.currentChar = this.source.charAt(this.currentIndex);
     }
   }
-
- // public newToken(
-  //   type: TokenType,
-  //   value = this.currentChar,
-  //   lineNumber = this.lineNumber,
-  // ): Token {
-  //   return {
-  //     type,
-  //     value,
-  //     lineNumber,
-  //   };
-  // }
 
   private skipWhitespace() {
     while (
@@ -138,7 +158,8 @@ export class Lexer {
   }
 
   private skipComment() {
-    while (this.currentChar !== "\n" && this.currentChar !== "\0") { // cant use isAtEnd() as it will end loop one character early, needs to ACTUALLY be at the end
+    while (this.currentChar !== "\n" && this.currentChar !== "\0") {
+      // cant use isAtEnd() as it will end loop one character early, needs to ACTUALLY be at the end
       this.consume();
     }
 
@@ -147,36 +168,39 @@ export class Lexer {
     // this.lineNumber++
   }
 
-  private isAtEnd() {
-    return this.nextIndex >= this.source.length; // is this the best way to do this?
-  }
+  // private isAtEnd() {
+  //   // could change it to
+  //   return this.currentChar === "\0";
+  //   return this.nextIndex >= this.source.length; // is this the best way to do this?
+  // }
 
   private variable(): Token {
     // set the inital index (the index of the ":")
-    // console.log(this.currentIndex)
-    const initalIndex = this.currentIndex;
+    // const initalIndex = this.currentIndex;
 
-    // consume the ":" character
-    this.consume();
-
-    // read the rest of the varible as an identifier
-    while (this.isAlpha(this.currentChar)) {
+    do {
+      // using this do-while makes sure the ":" is consumed
       this.consume();
-    }
+      // read the rest of the varible as an identifier
+    } while (this.isAlpha(this.currentChar));
 
     // get the literal value of the variable (including the ":")
-    const value = this.source.substring(initalIndex, this.currentIndex);
-    // console.log(value)
-    // console.log(this.nextIndex, this.source.length)
+
+    // remove the ":" as it has no internal meaning... it is only needed in syntax
+    const value = this.source.substring(this.startIndex + 1, this.currentIndex);
+    if (value.length === 0) { // this meaning it was just the ":" and there was no identifier at the end
+      throw new Error(`Invalid ":" at line ${this.lineNumber}`);
+    }
+
     return newToken(TokenType.VARIABLE, value, this.lineNumber);
   }
 
   private identifier(): Token {
-    const initalIndex = this.currentIndex;
+    // const initalIndex = this.currentIndex;
     while (this.isAlpha(this.currentChar)) {
       this.consume();
     }
-    const value = this.source.substring(initalIndex, this.currentIndex);
+    const value = this.source.substring(this.startIndex, this.currentIndex);
     const token = newToken(TokenType.IDENTIFIER, value, this.lineNumber);
     if (this.isStatement(value)) {
       token.type = TokenType.STATEMENT;
@@ -185,31 +209,32 @@ export class Lexer {
   }
 
   private number(): Token {
-    const initalIndex = this.currentIndex;
+    // const initalIndex = this.currentIndex;
     while (this.isDigit(this.currentChar)) {
       this.consume();
     }
-    const value = this.source.substring(initalIndex, this.currentIndex);
+    const value = this.source.substring(this.startIndex, this.currentIndex);
     return newToken(TokenType.INTEGER, value, this.lineNumber);
   }
 
   private string(): Token {
-    const initalIndex = this.currentIndex;
-    while (this.peek() !== '"' && !this.isAtEnd()) {
-      if (this.peek() === "\n") this.lineNumber++;
+    // const initalIndex = this.currentIndex;
+    do {
+      if (this.currentChar === "\n") {
+        this.lineNumber++;
+      }
       this.consume();
-    }
+    } while (this.currentChar !== '"' && this.currentChar !== "\0");
 
-    // meaning the loop broke bacuae the eand was reached with no terminator
-    if (this.isAtEnd()) {
+    if (this.currentChar === "\0") {
       throw new Error(`Unterminated string at line ${this.lineNumber}`);
     }
 
     // consume the last '"'
-    this.consume();
+    this.consume(); // is this then needed?
 
     // strip out the quotes
-    const value = this.source.substring(initalIndex + 1, this.currentIndex);
+    const value = this.source.substring(this.startIndex + 1, this.currentIndex - 1);
     return newToken(TokenType.STRING, value, this.lineNumber);
   }
 

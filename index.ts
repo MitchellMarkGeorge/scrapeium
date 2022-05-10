@@ -1,6 +1,5 @@
-import { Lexer } from "./src/lexer"
+import { Lexer } from "./src/lexer";
 import { TokenType } from "./src/lexer/types";
-
 
 // const example = `{
 //  # "hello",
@@ -12,14 +11,14 @@ import { TokenType } from "./src/lexer/types";
 // }` // not reading the first character
 //
 
-const example = `"hello" #this is a comment`
+const example = `"`;
 
 const lexer = new Lexer(example);
 
 let token = lexer.nextToken();
 
-while(token.type !== TokenType.EOF) {
+while (token.type !== TokenType.EOF) {
   console.log(token);
   token = lexer.nextToken();
 }
-console.log(token);
+console.log(token); // eof token

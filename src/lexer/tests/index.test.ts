@@ -22,7 +22,7 @@ test("comments are skiped and yeilds EOF token", () => {
     value: "\0",
     lineNumber: 1,
   };
-  console.log(token)
+  console.log(token);
   expect(token).toEqual(expextedToken);
 });
 
@@ -48,7 +48,7 @@ test("select statement with variable yeilds correct tokens", () => {
 
   const expectedTokens = [
     newToken(TokenType.STATEMENT, "select", 1),
-    newToken(TokenType.VARIABLE, ":next_child", 1),
+    newToken(TokenType.VARIABLE, "next_child", 1),
   ];
 
   expectedTokens.forEach((token) => {
@@ -63,7 +63,7 @@ test("read statement yeilds correct tokens", () => {
 
   const expectedTokens = [
     newToken(TokenType.STATEMENT, "read", 1),
-    newToken(TokenType.VARIABLE, ":inner_text", 1), // is the ":" still needed?
+    newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
   ];
 
   expectedTokens.forEach((token) => {
@@ -85,6 +85,33 @@ test("select_child statement yeilds correct tokens", () => {
     expect(lexer.nextToken()).toEqual(token);
   });
 });
+
+test("invalid varible reference should throw and errror", () => {
+  const query = `:`;
+  const lexer = new Lexer(query);
+
+  expect(() => {
+    lexer.nextToken()
+  }).toThrow();
+})
+
+test("unterminated string shoukd throw an error", () => {
+  const query = `"hello`;
+  const lexer = new Lexer(query);
+
+  expect(() => {
+    lexer.nextToken()
+  }).toThrow();
+})
+
+test("unkown character shoukd throw an error", () => {
+  const query = `.`;
+  const lexer = new Lexer(query);
+
+  expect(() => {
+    lexer.nextToken()
+  }).toThrow();
+})
 // test errors as well
 //
 // test("", () => {
