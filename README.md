@@ -1,3 +1,4 @@
+![Scrapeium Logo](Scrapeium.png)
 # Scrapeium 
 A poweful query language for scraping the web.
 
