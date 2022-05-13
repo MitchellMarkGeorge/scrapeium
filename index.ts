@@ -11,7 +11,7 @@ import { TokenType } from "./src/lexer/types";
 // }` // not reading the first character
 //
 
-const example = `"hello" :`;
+const example = `"hello" :bye`;
 
 const lexer = new Lexer(example);
 

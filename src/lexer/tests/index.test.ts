@@ -26,13 +26,13 @@ test("comments are skiped and yeilds EOF token", () => {
   expect(token).toEqual(expextedToken);
 });
 
-test("select statement yeilds correct tokens", () => {
+test("query statement yeilds correct tokens", () => {
   //
-  const query = `select ".name"`;
+  const query = `query ".name"`;
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "select", 1),
+    newToken(TokenType.STATEMENT, "query", 1),
     newToken(TokenType.STRING, ".name", 1),
   ];
 
@@ -112,6 +112,54 @@ test("unkown character shoukd throw an error", () => {
     lexer.nextToken()
   }).toThrow();
 })
+
+test("to_number statement yeilds correct tokens", () => {
+  //
+  const query = `to_number :inner_text`;
+  const lexer = new Lexer(query);
+
+  const expectedTokens = [
+    newToken(TokenType.STATEMENT, "to_number", 1),
+    newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
+  ];
+
+  expectedTokens.forEach((token) => {
+    expect(lexer.nextToken()).toEqual(token);
+  });
+});
+
+test("read statement yeilds correct tokens", () => {
+  //
+  const query = `read :inner_text`;
+  const lexer = new Lexer(query);
+
+  const expectedTokens = [
+    newToken(TokenType.STATEMENT, "read", 1),
+    newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
+  ];
+
+  expectedTokens.forEach((token) => {
+    expect(lexer.nextToken()).toEqual(token);
+  });
+});
+
+test("read_attribute statement yeilds correct tokens", () => {
+  //
+  const query = `read_attribute "class"`;
+  const lexer = new Lexer(query);
+
+  const expectedTokens = [
+    newToken(TokenType.STATEMENT, "read_attribute", 1),
+    newToken(TokenType.STRING, "class", 1), // is the ":" still needed?
+  ];
+
+  expectedTokens.forEach((token) => {
+    expect(lexer.nextToken()).toEqual(token);
+  });
+});
+
+
+
 // test errors as well
 //
 // test("", () => {

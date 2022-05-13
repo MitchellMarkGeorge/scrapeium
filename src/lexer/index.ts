@@ -261,8 +261,9 @@ export class Lexer {
 
   private isStatement(identifier: string) {
     const STATEMENTS = [
-      "select",
+      "query",
       "select_child",
+      "select", 
       "read",
       "read_attribute",
       "to_number", // implement this later
