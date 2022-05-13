@@ -1,6 +1,4 @@
-<div align="center">
-  <img src="Scrapeium.png"
-</div>
+![Scrapeium Logo](Scrapeium.png)
 # Scrapeium 
 A poweful query language for scraping the web.
 
