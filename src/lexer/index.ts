@@ -1,4 +1,7 @@
-import { Token, TokenType, newToken } from "./types";
+import { errorFactory } from "../utils";
+import { Token, TokenType, newToken,  statements } from "./types";
+
+const error = errorFactory("LexerError")
 
 export class Lexer {
   private source: string;
@@ -35,15 +38,17 @@ export class Lexer {
     }
 
     let token: Token;
-    // set the start index
+    // set the start index for multi character tokens
     this.startIndex = this.currentIndex;
-
+    // NOTE: for all multi-character tokens (strings, variables etc), make sure to return imediately and not to break
+    // doing this makes sure that the next potential character is not skiped due to the this.consume() at the end 
+    // only break for sinlge character tokens
     switch (this.currentChar) {
       case ":": {
         const nextCharacter = this.source.charAt(this.currentIndex + 1);
         // if the next charcter is not an alpha (meaning invalid varible declaration) throw error
         if (!this.isAlpha(nextCharacter)) {
-          throw new Error(`Invalid ":" at line ${this.lineNumber}`);
+          return error(`Invalid ":"`, this.lineNumber);
         } else {
           // need to return this imediately so it dosen't accidentally skip over/consume another character
           return this.variable();
@@ -109,8 +114,8 @@ export class Lexer {
         );
         break;
       case '"':
-        token = this.string();
-        break;
+          // for all mul
+        return token = this.string();
       case "\0":
         token = newToken(TokenType.EOF, "\0", this.lineNumber);
         break;
@@ -125,8 +130,9 @@ export class Lexer {
           // token = this.number()
           return this.number();
         } else {
-          throw new Error(
-            `Illegal character ${this.currentChar} at line ${this.lineNumber}`,
+          return error(
+            `Illegal character ${this.currentChar}`,
+            this.lineNumber
           );
         }
     }
@@ -205,8 +211,12 @@ export class Lexer {
     }
     const value = this.source.substring(this.startIndex, this.currentIndex);
     const token = newToken(TokenType.IDENTIFIER, value, this.lineNumber);
-    if (this.isStatement(value)) {
-      token.type = TokenType.STATEMENT;
+    const statementTokenType = statements[value];
+    // if the identifier is a statement
+    if (statementTokenType) { 
+       token.type = statementTokenType; 
+    } else {
+        token.type = TokenType.IDENTIFIER;
     }
     return token;
   }
@@ -230,7 +240,7 @@ export class Lexer {
     } while (this.currentChar !== '"' && this.currentChar !== "\0");
 
     if (this.currentChar === "\0") {
-      throw new Error(`Unterminated string at line ${this.lineNumber}`);
+      error(`Unterminated string`, this.lineNumber);
     }
 
     // consume the last '"'
@@ -255,19 +265,5 @@ export class Lexer {
 
   private isDigit(char: string) {
     return char >= "0" && char <= "9";
-  }
-
-  // all the statements avalible in scrapeium
-
-  private isStatement(identifier: string) {
-    const STATEMENTS = [
-      "query",
-      "select_child",
-      "select", 
-      "read",
-      "read_attribute",
-      "to_number", // implement this later
-    ];
-    return STATEMENTS.includes(identifier);
   }
 }

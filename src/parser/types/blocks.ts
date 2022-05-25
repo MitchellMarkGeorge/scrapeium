@@ -1,19 +1,19 @@
 import { Statement } from "./statements"
 
 export enum BlockType {
-  EXPRESSION_BLOCK,
-  ARRAY_BLOCK,
-  OBJECT_BLOCK
+  EXPRESSION_BLOCK = "EXPRESSION_BLOCK",
+  ARRAY_BLOCK = "ARRAY_BLOCK",
+  OBJECT_BLOCK = "OBJECT_BLOCK"
 }
 
 export interface Block {
   type: BlockType
-  blockPrefix?: BlockPrefix
+  blockPrefix: BlockPrefix | null
   // should there be a body property
 }
 
 export interface BlockPrefix {
-  value: string
+  value: string // should this be selector
 }
 
 export interface ArrayBlock extends Block {
@@ -29,6 +29,7 @@ export interface ObjectBlock extends Block {
 }
 
 export interface KeyValue {
+  type: "KEY_VALUE"
   key: string
-  value: Block
+  value: Block // Block
 }

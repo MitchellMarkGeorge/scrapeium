@@ -32,7 +32,7 @@ test("query statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "query", 1),
+    newToken(TokenType.QUERY, "query", 1),
     newToken(TokenType.STRING, ".name", 1),
   ];
 
@@ -47,7 +47,7 @@ test("select statement with variable yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "select", 1),
+    newToken(TokenType.SELECT, "select", 1),
     newToken(TokenType.VARIABLE, "next_child", 1),
   ];
 
@@ -62,7 +62,7 @@ test("read statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "read", 1),
+    newToken(TokenType.READ, "read", 1),
     newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
   ];
 
@@ -77,7 +77,7 @@ test("select_child statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "select_child", 1),
+    newToken(TokenType.SELECT_CHILD, "select_child", 1),
     newToken(TokenType.INTEGER, "3", 1), // is the ":" still needed?
   ];
 
@@ -119,7 +119,7 @@ test("to_number statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "to_number", 1),
+    newToken(TokenType.TO_NUMBER, "to_number", 1),
     newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
   ];
 
@@ -134,7 +134,7 @@ test("read statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "read", 1),
+    newToken(TokenType.READ, "read", 1),
     newToken(TokenType.VARIABLE, "inner_text", 1), // is the ":" still needed?
   ];
 
@@ -149,7 +149,7 @@ test("read_attribute statement yeilds correct tokens", () => {
   const lexer = new Lexer(query);
 
   const expectedTokens = [
-    newToken(TokenType.STATEMENT, "read_attribute", 1),
+    newToken(TokenType.READ_ATTRIBUTE, "read_attribute", 1),
     newToken(TokenType.STRING, "class", 1), // is the ":" still needed?
   ];
 

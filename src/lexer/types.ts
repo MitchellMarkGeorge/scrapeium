@@ -8,7 +8,7 @@ export interface Token {
 export enum TokenType {
   VARIABLE = "VARIABLE", // ":" followed by an identifer
   IDENTIFIER = "IDENTIFIER", // based on snake case -> letters (lowecase and uppercase), numbers, and "_" (cant start with number)
-  STATEMENT = "STATEMENT", // same as an identifier but special -- determined from lexer
+  // STATEMENT = "STATEMENT", // same as an identifier but special -- determined from lexer
   STRING = "STRING",
   COMMA = "COMMA", // ,
   PREFIX_OPERATOR = "PREFIX_OPERATOR", // >
@@ -22,6 +22,15 @@ export enum TokenType {
   INTEGER = "INTEGER",
   // FLOAT,
   EOF = "EOF", // end-of-file
+
+  // statements
+  QUERY = "QUERY",
+  SELECT = "SELECT",
+  SELECT_CHILD = "SELECT_CHILD",
+  READ = "READ",
+  READ_ATTRIBUTE = "READ_ATTRIBUTE",
+  TO_NUMBER = "TO_NUMBER"
+
 }
 
 export function newToken(
@@ -35,8 +44,13 @@ export function newToken(
     lineNumber,
   };
 }
-// export interface Position {
-//   line: number,
-//   column: number
-// }
-//
+
+export const statements: Record<string, TokenType> = {
+  "query": TokenType.QUERY,
+  "select": TokenType.SELECT,
+  "select_child": TokenType.SELECT_CHILD,
+  "read": TokenType.READ,
+  "read_attribute": TokenType.READ_ATTRIBUTE,
+  "to_number": TokenType.TO_NUMBER,
+}
+
