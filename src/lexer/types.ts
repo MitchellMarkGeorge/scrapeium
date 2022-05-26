@@ -21,7 +21,7 @@ export enum TokenType {
   RIGHT_CURLY_BRACKET = "RIGHT_CURLY_BRACKET", // }
   INTEGER = "INTEGER",
   // FLOAT,
-  EOF = "EOF", // end-of-file
+  EOF = "END_OF_FILE", // end-of-file
 
   // statements
   QUERY = "QUERY",

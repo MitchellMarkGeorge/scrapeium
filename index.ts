@@ -17,7 +17,7 @@ import { inspect } from "util";
 const example = `
 "#info" > {
     name = read :inner_text,
-    age = (
+    age = "hwllo" > (
         query ".age"
         read :inner_text
     ),

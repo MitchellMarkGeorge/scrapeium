@@ -1,10 +1,29 @@
-export function errorFactory(scope: string) {
-  return (message: string, lineNumber: number) => {
-    console.log(`${scope}: ${message} (line ${lineNumber})`);
-    return process.exit(1)
+class CustomError extends Error {
+  constructor(message: string, lineNumber: number) {
+    super(`${message} (line ${lineNumber})`);
   }
 }
-// export function error(message: string) {
-//   console.log(message); // use console.error?
-//   return process.exit(1)
-// }
+
+export class LexerError extends CustomError {
+  constructor(message: string, lineNumber: number) {
+    super(message, lineNumber);
+    // this.name = "LexerError"
+    Object.setPrototypeOf(this, LexerError.prototype)
+  }
+}
+
+export class ParserError extends CustomError {
+  constructor(message: string, lineNumber: number) {
+    super(message, lineNumber);
+    // this.name = "ParserError"
+    Object.setPrototypeOf(this, LexerError.prototype)
+  }
+}
+
+export class RuntimeError extends CustomError {
+  constructor(message: string, lineNumber: number) {
+    super(message, lineNumber);
+    // this.name = "RuntimeError"
+    Object.setPrototypeOf(this, LexerError.prototype)
+  }
+}

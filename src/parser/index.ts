@@ -1,6 +1,6 @@
 import { Lexer } from "../lexer";
 import { Token, TokenType } from "../lexer/types";
-import { errorFactory } from "../utils";
+import { ParserError } from "../utils";
 import { Query } from "./types";
 import {
   BlockPrefix,
@@ -21,7 +21,6 @@ import {
   ToNumberStatement,
 } from "./types/statements";
 
-const error = errorFactory("ParseError");
 // work on all error messages (should be more contextual/smarter)
 // might need a peek token to do so in most cases
 
@@ -65,7 +64,7 @@ export class Parser {
     if (this.match(type)) {
       return this.advance(); // move on to the next token an return the current token
     } else {
-      return error(
+      throw new ParserError(
         errorMessage || `Expected ${type}; Found ${this.currentToken.type}`,
         this.currentToken.lineNumber,
       );
@@ -100,7 +99,7 @@ export class Parser {
       return expressionBlock;
     } else {
       // retruns never -> never going to happen because of process.exit()
-      return error(
+     throw new ParserError (
         `Unexpected ${this.currentToken.type}`,
         this.currentToken.lineNumber,
       );
@@ -122,7 +121,7 @@ export class Parser {
   }
   private parseArrayBlock(blockPrefix: BlockPrefix | null): ArrayBlock {
     if (blockPrefix === null) {
-      return error(
+      throw new ParserError(
         `Required block prefix missing in array block definition`,
         this.currentToken.lineNumber,
       );
@@ -143,7 +142,7 @@ export class Parser {
           body: this.parseStatement(),
         } as ExpressionBlock;
       } else {
-        return error(
+        throw new ParserError(
           `Expected object block or expression block, found ${this.currentToken.value}`,
           this.currentToken.lineNumber,
         );
@@ -229,7 +228,7 @@ export class Parser {
       case TokenType.TO_NUMBER:
         return this.parseToNumberStatement();
       default:
-        return error(`Unknown statement`, this.currentToken.lineNumber);
+        throw new ParserError(`Expected statement; Found ${this.currentToken.type}`, this.currentToken.lineNumber);
     }
   }
 

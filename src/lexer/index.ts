@@ -1,7 +1,6 @@
-import { errorFactory } from "../utils";
+import { LexerError } from "../utils";
 import { Token, TokenType, newToken,  statements } from "./types";
 
-const error = errorFactory("LexerError")
 
 export class Lexer {
   private source: string;
@@ -48,7 +47,7 @@ export class Lexer {
         const nextCharacter = this.source.charAt(this.currentIndex + 1);
         // if the next charcter is not an alpha (meaning invalid varible declaration) throw error
         if (!this.isAlpha(nextCharacter)) {
-          return error(`Invalid ":"`, this.lineNumber);
+          throw new LexerError(`Invalid ":"`, this.lineNumber);
         } else {
           // need to return this imediately so it dosen't accidentally skip over/consume another character
           return this.variable();
@@ -130,7 +129,7 @@ export class Lexer {
           // token = this.number()
           return this.number();
         } else {
-          return error(
+          throw new LexerError(
             `Illegal character ${this.currentChar}`,
             this.lineNumber
           );
@@ -240,7 +239,7 @@ export class Lexer {
     } while (this.currentChar !== '"' && this.currentChar !== "\0");
 
     if (this.currentChar === "\0") {
-      error(`Unterminated string`, this.lineNumber);
+      throw new LexerError(`Unterminated string`, this.lineNumber);
     }
 
     // consume the last '"'
