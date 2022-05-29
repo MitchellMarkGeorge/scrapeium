@@ -7,21 +7,23 @@ export enum BlockType {
 }
 
 export interface Block {
-  type: BlockType
-  blockPrefix: BlockPrefix | null
+  type: BlockType // this is the only thing they share
   // should there be a body property
+  blockPrefix: BlockPrefix | null
 }
 
 export interface BlockPrefix {
   value: string // should this be selector
 }
 
-export interface ArrayBlock extends Block {
+export interface ArrayBlock extends Omit<Block, "blockPrefix"> {
   body: ExpressionBlock | ObjectBlock
+  blockPrefix: BlockPrefix // required
 }
 
 export interface ExpressionBlock extends Block {
   body: Statement | Statement[] 
+
 }
 
 export interface ObjectBlock extends Block {

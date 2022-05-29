@@ -140,6 +140,7 @@ export class Parser {
         body = {
           type: BlockType.EXPRESSION_BLOCK,
           body: this.parseStatement(),
+          blockPrefix: null
         } as ExpressionBlock;
       } else {
         throw new ParserError(

@@ -14,18 +14,20 @@ import { inspect } from "util";
 //
 
 // should commas be enforced????
-const example = `
-"#info" > {
-    name = read :inner_text,
-    age = "hwllo" > (
-        query ".age"
-        read :inner_text
-    ),
-    friends = ".friends" > [{
-        text = (to_number :inner_text),
-    }],
-}
-`;
+// const example = `
+// "#info" > {
+//     name = read :inner_text,
+//     age = "hwllo" > (
+//         query ".age"
+//         read :inner_text
+//     ),
+//     friends = ".friends" > [{
+//         text = (to_number :inner_text),
+//     }],
+// }
+// `;
+
+const example = `".name" > [read :inner_text]`
 
 const parser = new Parser(example);
 

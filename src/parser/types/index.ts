@@ -5,4 +5,4 @@ export interface Query {
   rootBlock: Block;
 }
 
-export type Primitive = string |  number  ; // for now
+export type Primitive = string |  number | null | Element ; // for now
