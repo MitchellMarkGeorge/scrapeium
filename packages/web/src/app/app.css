@@ -1,0 +1,84 @@
+/* Your styles goes here. */
+
+body, html, #root {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.test {
+    flex: 1;
+}
+
+.split-pane-col {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .split-pane-row {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .split-pane-top,
+  .split-pane-bottom,
+  .split-pane-right,
+  .split-pane-left {
+    flex: 1;
+    overflow: hidden;
+  }
+  
+ 
+  .split-pane-top,
+  .split-pane-bottom {
+    background-color: #ccc;
+    text-align: left;
+    padding: 2%;
+  }
+  
+  .separator-col {
+    border: 5px solid black;
+    cursor: col-resize;
+  }
+  
+  .separator-row {
+    border: 5px solid black;
+    cursor: row-resize;
+  }
+  
+  
+  blockquote {
+    border-left: 10px solid #ccc;
+    margin: 5.5em 0 0 0;
+    quotes: "\201C""\201D""\2018""\2019";
+    padding: 2rem 0 1rem;
+  }
+  
+  blockquote:before {
+    color: #ccc;
+    content: open-quote;
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+  }
+  
+  blockquote p {
+    display: inline;
+  }
+  
+  .quote {
+    max-width: 60%;
+    text-align: right;
+    margin: auto;
+    font-style: italic;
+  }
+  
+  .quote span {
+    font-weight: bold;
+  }

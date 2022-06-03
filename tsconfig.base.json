@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@scrapeium/lang": ["packages/lang/src/index.ts"]
+      "@scrapeium/lang": ["packages/lang/src/index.ts"],
     }
   },
   "exclude": ["node_modules", "tmp"]

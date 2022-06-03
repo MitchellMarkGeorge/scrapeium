@@ -28,7 +28,7 @@ import {
 
 // can test this locally by using test html files
 export class Evaluator {
-  private query: Query;
+  private query: Query
 
   /**
    * Evaluator class for Scrapeium (tree-walking interpreter)
@@ -302,7 +302,7 @@ export class Evaluator {
     if (typeof value !== "string") {
       throw new Error(`Can only convert string to number`);
     } else {
-      const result = parseInt(value);
+      const result = parseInt(value); // what about floats
       if (isNaN(result)) {
         throw new Error(`Unable to convert value "${value}" to string`);
       } else return result;
