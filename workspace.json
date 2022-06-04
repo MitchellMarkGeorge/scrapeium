@@ -3,7 +3,6 @@
   "version": 2,
   "projects": {
     "lang": "packages/lang",
-    "test": "packages/test",
     "web": "packages/web",
     "web-e2e": "packages/web-e2e"
   }
