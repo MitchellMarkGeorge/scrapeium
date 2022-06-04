@@ -7,14 +7,13 @@ import {
   Heading,
   Icon,
   Spacer,
-  VStack,
   HStack,
   Select,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Evaluator, Parser, ResultType } from '@scrapeium/lang';
 
-import { IoPlanet, IoPlay } from 'react-icons/io5';
+import { IoPlanet } from 'react-icons/io5';
 import { DemoContext } from '../components/DemoContext';
 import QueryEditor from '../components/QueryEditor';
 import HtmlEditor from '../components/HtmlEditor';
@@ -31,7 +30,7 @@ export default function Demo() {
   const reset = () => {
     setQuery('');
     setHtml('');
-    setOutput("")
+    setOutput('');
   };
 
   const runQuery = () => {
@@ -54,10 +53,7 @@ export default function Demo() {
     }
   };
 
-  const translateResult = (
-    result: ResultType,
-    lang: 'json5' | 'yaml'
-  ) => {
+  const translateResult = (result: ResultType, lang: 'json5' | 'yaml') => {
     switch (lang) {
       case 'json5':
         return JSON.stringify(result, null, 2);
@@ -111,7 +107,7 @@ export default function Demo() {
             paddingLeft="1rem"
             paddingRight="1rem"
             paddingBottom="1rem"
-            gap={2}
+            gap={4}
           >
             <GridItem rowSpan={1} colSpan={1}>
               <QueryEditor />

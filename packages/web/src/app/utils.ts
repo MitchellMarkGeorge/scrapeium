@@ -5,5 +5,5 @@
     }
 
     export const goToDocs = () => {
-        window.open(`${GITHUB_URL}//blob/main/DESIGN.md`)
+        window.open(`https://scrapeium.notion.site/Design-Doc-Language-Spec-253b3187f3e843ccb5a0652e81ec0cf7`) // notion docs page
     }

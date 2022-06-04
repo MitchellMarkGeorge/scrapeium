@@ -17,7 +17,7 @@ export class Scope {
   // think about this
   getValue(variable: string): Primitive {
     if (this.values.has(variable)) {
-      return this.values.get(variable) as NonNullable<Primitive>; // cant return undefined
+      return this.values.get(variable) as Primitive; // cant return undefined
     }
 
     if (this.parentScope) {

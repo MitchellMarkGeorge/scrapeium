@@ -1,4 +1,4 @@
-import { Primitive, Query } from "../parser/types";
+import { Primitive, Query } from '../parser/types';
 import {
   Block,
   BlockType,
@@ -6,7 +6,7 @@ import {
   ArrayBlock,
   ExpressionBlock,
   BlockPrefix,
-} from "../parser/types/blocks";
+} from '../parser/types/blocks';
 import {
   QueryStatement,
   ReadAttributeStatement,
@@ -16,19 +16,19 @@ import {
   Statement,
   StatementType,
   ToNumberStatement,
-} from "../parser/types/statements";
-import { Scope } from "./Scope";
+} from '../parser/types/statements';
+import { Scope } from './Scope';
 import {
   ArrayBlockResult,
   ExpressionBlockResult,
   BlockResult,
   ObjectBlockResult,
   ResultType,
-} from "./types";
+} from './types';
 
 // can test this locally by using test html files
 export class Evaluator {
-  private query: Query
+  private query: Query;
 
   /**
    * Evaluator class for Scrapeium (tree-walking interpreter)
@@ -42,9 +42,9 @@ export class Evaluator {
   public eval(document: Document): ResultType {
     const { rootBlock } = this.query;
     const scope = new Scope(null);
-    this.defineVariables(document.documentElement, scope)
+    this.defineVariables(document.documentElement, scope);
     // TODO replace all this.document.querySelector/querySelectorAll to use element
-    // this way, selector quering can be based on the decendants, and the children of a block prefix only 
+    // this way, selector quering can be based on the decendants, and the children of a block prefix only
     // operate under the context of selected element/elements, not the entire document
     // this is the same for each subsequent scope (and travels back up)
     // the default :element is the document element
@@ -70,7 +70,7 @@ export class Evaluator {
   private evalBlockPrefix(block: BlockPrefix, scope: Scope) {
     // this method essentially "mutates" or changes the given scope and returns nuthong
     const selector = block.value;
-    const parentElement = scope.getValue("element") as Element;
+    const parentElement = scope.getValue('element') as Element;
 
     const selectedElement = parentElement.querySelector(selector);
     if (!selectedElement) {
@@ -86,7 +86,7 @@ export class Evaluator {
 
   private evalArrayBlockPrefix(block: BlockPrefix, scope: Scope) {
     const selector = block.value;
-    const parentElement = scope.getValue("element") as Element
+    const parentElement = scope.getValue('element') as Element;
 
     const elements = parentElement.querySelectorAll(selector);
     if (elements.length === 0) {
@@ -97,65 +97,47 @@ export class Evaluator {
   }
 
   private defineVariables(element: Element, scope: Scope) {
-    scope.setValue("element", element); //
-    if (element.firstElementChild) {
-      scope.setValue("first_child", element.firstElementChild);
-    }
-    if (element.lastElementChild) {
-      scope.setValue("last_child", element.lastElementChild);
-    }
+    scope.setValue('element', element); //
+    scope.setValue('first_child', element.firstElementChild || null); // doing this makes sure that all values are reset if they are not present in the element
+    scope.setValue('last_child', element.lastElementChild || null);
 
-    if (element.nextElementSibling) {
-      scope.setValue("next_sibling", element.nextElementSibling);
-    }
-    if (element.previousElementSibling) {
-      scope.setValue("previous_sibling", element.previousElementSibling);
-    }
+    scope.setValue('next_sibling', element.nextElementSibling || null);
+    scope.setValue('previous_sibling', element.previousElementSibling || null);
 
-    if (element.innerHTML) {
-      // could be an empty string
-      scope.setValue("inner_html", element.innerHTML);
-    }
-    if (element.id) {
-      // could be an empty string
-      scope.setValue("id", element.id);
-    }
+    // could be an empty string
+    scope.setValue('inner_html', element.innerHTML || null);
+    // could be an empty string
+    scope.setValue('id', element.id || null);
 
-    if (element.className) {
-      // could be an empty string
-      scope.setValue("class", element.className);
-    }
+    // could be an empty string
+    scope.setValue('class', element.className || null);
 
-    if ((element as HTMLElement).innerText) {
-      // could be an empty string
-      scope.setValue("inner_text", (element as HTMLElement).innerText);
-    }
+    // could be an empty string
+    scope.setValue('inner_text', (element as HTMLElement).innerText || null);
 
-    if (element.textContent) {
-      scope.setValue("text_content", element.textContent);
-    }
+    scope.setValue('text_content', element.textContent || null);
   }
 
   private evalArrayBlock(block: ArrayBlock, scope: Scope): ArrayBlockResult {
     // evaluate block prefix (for this one, select all)
     const elements = this.evalArrayBlockPrefix(block.blockPrefix, scope);
-    // const elements = scope.getValue("elements") as NodeListOf<Element>;
     const result: ArrayBlockResult = [];
     const body = block.body;
 
     elements.forEach((element, count) => {
       // a new scope is only created when entering new sub blocks (and they extend the current block)
+      // create a new scoce for subblock
       const newScope = new Scope(scope);
-      this.defineVariables(element, newScope); // define the element and all its values for the subblocks
-      // basically the same block being "ececuted" multiple times, but with a different element context
-      newScope.setValue("count", count.toString());
+      this.defineVariables(element, newScope); // define the element and all its values for the subblock
+      // basically the same block being "executed" multiple times, but with a different element context
+      newScope.setValue('count', count.toString());
       // TODO technically uneccesary as the the body type will always be the same
       // have different methods for each type?
       if (body.type === BlockType.OBJECT_BLOCK) {
         result.push(this.evalObjectBlock(body as ObjectBlock, newScope));
       } else if (body.type === BlockType.EXPRESSION_BLOCK) {
         result.push(
-          this.evalExpressionBlock(body as ExpressionBlock, newScope),
+          this.evalExpressionBlock(body as ExpressionBlock, newScope)
         );
       }
     });
@@ -171,7 +153,8 @@ export class Evaluator {
 
     block.body.forEach((keyValue) => {
       const { key, value } = keyValue;
-      const newScope = new Scope(scope); // shold it
+      // create new scope for subblock
+      const newScope = new Scope(scope);
       result[key] = this.evalBlock(value, newScope);
     });
 
@@ -179,13 +162,10 @@ export class Evaluator {
   }
   private evalExpressionBlock(
     block: ExpressionBlock,
-    scope: Scope,
+    scope: Scope
   ): ExpressionBlockResult {
-    // should expression blocks have thier own scope
-    // can only be altered using the block prefix and the statements it evaluates
-    const newScope = new Scope(scope);
     if (block.blockPrefix) {
-      this.evalBlockPrefix(block.blockPrefix, newScope);
+      this.evalBlockPrefix(block.blockPrefix, scope);
     }
 
     // if there is ohnly one statement, eval it and return
@@ -197,19 +177,19 @@ export class Evaluator {
       // Array of statements
       body.forEach((statement) => {
         // keep seting the varibale till the last one
-        result = this.evalStatement(statement, newScope);
+        result = this.evalStatement(statement, scope);
       });
       // return result;
     } else {
-      result = this.evalStatement(body, newScope);
+      result = this.evalStatement(body, scope);
       // return this.evalStatement(body, scope);
     }
 
     if (result === null) {
-      throw new Error("Expression block returned null");
+      throw new Error('Expression block returned null');
     } else {
       return result;
-    } 
+    }
   }
   private evalStatement(block: Statement, scope: Scope): Primitive {
     switch (block.type) {
@@ -220,14 +200,14 @@ export class Evaluator {
       case StatementType.SELECT_CHILD:
         return this.evalSelectChildStatement(
           block as SelectChildStatement,
-          scope,
+          scope
         );
       case StatementType.READ:
         return this.evalReadStatement(block as ReadStatement, scope);
       case StatementType.READ_ATTRIBUTE:
         return this.evalReadAttributeStatement(
           block as ReadAttributeStatement,
-          scope,
+          scope
         );
       case StatementType.TO_NUMBER:
         return this.evalToNumberStatement(block as ToNumberStatement, scope);
@@ -236,7 +216,7 @@ export class Evaluator {
 
   private evalQueryStatement(block: QueryStatement, scope: Scope): Primitive {
     const selector = block.selectorString;
-    const parentElement = scope.getValue("element") as Element
+    const parentElement = scope.getValue('element') as Element;
 
     const element = parentElement.querySelector(selector);
     if (!element) {
@@ -251,24 +231,28 @@ export class Evaluator {
     const value = scope.getValue(block.variable) as Element;
     // need a way to get the element type without the value
 
-    if (typeof value === "object") { // checks if it an element object
+    if (value instanceof Element) { // onnly works in the browser
+      // could do typeof value === "object" && value !== null
+      console.log(value)
+      // checks if it an element object
       // scope.setValue("element", value);
       this.defineVariables(value, scope);
       return null;
+    } else if (value === null) {
+      throw new Error(`Unable to select value "${block.variable}" that is null`)
     } else {
-      throw new Error("Varible in select statement must point to an element");
+      throw new Error('Varible in select statement must point to an element');
     }
   }
   private evalSelectChildStatement(
     block: SelectChildStatement,
-    scope: Scope,
+    scope: Scope
   ): Primitive {
     const selectedChildId = block.selectedChild;
-    const element = scope.getValue("element") as Element;
+    const element = scope.getValue('element') as Element;
     const selectedChild = element.children[selectedChildId];
 
     if (selectedChild) {
-      // scope.setValue("element", selectedChild);
       this.defineVariables(selectedChild, scope);
       return null;
     } else {
@@ -281,9 +265,9 @@ export class Evaluator {
   }
   private evalReadAttributeStatement(
     block: ReadAttributeStatement,
-    scope: Scope,
+    scope: Scope
   ): Primitive {
-    const element = scope.getValue("element") as Element;
+    const element = scope.getValue('element') as Element;
     const { attribute } = block;
 
     if (element.hasAttribute(attribute)) {
@@ -294,12 +278,12 @@ export class Evaluator {
   }
   private evalToNumberStatement(
     block: ToNumberStatement,
-    scope: Scope,
+    scope: Scope
   ): Primitive {
     const { variable } = block;
 
     const value = scope.getValue(variable);
-    if (typeof value !== "string") {
+    if (typeof value !== 'string') {
       throw new Error(`Can only convert string to number`);
     } else {
       const result = parseInt(value); // what about floats

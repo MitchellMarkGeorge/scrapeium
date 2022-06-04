@@ -23,4 +23,4 @@ A poweful query language for scraping the web.
 - **Syntax you can “speak” out loud**
 - **Completely Unopinionated** → we leave it to you to decide to query the web the way you want to (but like any language, there are obviously some recommended best practices)
 
-To see how the language works, go [here](DESIGN.md).
+To see how the language works, go [here](https://scrapeium.notion.site/Design-Doc-Language-Spec-253b3187f3e843ccb5a0652e81ec0cf7).
