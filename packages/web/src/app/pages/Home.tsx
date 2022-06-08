@@ -23,7 +23,7 @@ export default function Home() {
       <VStack spacing={4}>
         <Icon as={IoPlanet} boxSize="170px" color="white" />
         <Heading color="white" size="3xl">Scrapeium</Heading>
-        <Text color="white" fontSize="lg">A poweful query language for scraping the web</Text>
+        <Text color="white" fontSize="lg">A powerful query language for scraping the web</Text>
         <ButtonGroup>
             <Button onClick={goToDemo} leftIcon={<SiStarship/>}>Demo</Button>
             <Button onClick={goToDocs} leftIcon={<IoDocumentText/>}>Docs</Button>

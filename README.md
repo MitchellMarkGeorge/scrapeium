@@ -1,6 +1,6 @@
 ![Scrapeium Logo](Scrapeium.png)
 # Scrapeium 
-A poweful query language for scraping the web.
+A powerful query language for scraping the web.
 
 ## What is Scrapeium?
 
