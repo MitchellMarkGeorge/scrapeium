@@ -1,24 +1,15 @@
 {
+  "name": "web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/web/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/web:webpack",
+      "executor": "@nrwl/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "compiler": "babel",
-        "outputPath": "dist/packages/web",
-        "index": "packages/web/src/index.html",
-        "baseHref": "/",
-        "main": "packages/web/src/main.tsx",
-        "polyfills": "packages/web/src/polyfills.ts",
-        "tsConfig": "packages/web/tsconfig.app.json",
-        "assets": ["packages/web/src/favicon.ico", "packages/web/src/assets"],
-        "styles": ["packages/web/src/styles.css"],
-        "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack"
+        "outputPath": "dist/packages/web"
       },
       "configurations": {
         "development": {
@@ -44,7 +35,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/web:dev-server",
+      "executor": "@nrwl/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "web:build",
@@ -68,11 +59,25 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nrwl/vite:test",
       "outputs": ["coverage/packages/web"],
       "options": {
-        "jestConfig": "packages/web/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "preview": {
+      "executor": "@nrwl/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "web:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "web:build:development"
+        },
+        "production": {
+          "buildTarget": "web:build:production"
+        }
       }
     }
   },

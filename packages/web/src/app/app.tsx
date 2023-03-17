@@ -6,7 +6,6 @@ import Home from './pages/Home';
 import Demo from './pages/Demo';
 
 export function App() {
-  // TODO document language library
   return (
     <Routes>
       <Route path='/' element={<Home/>}/>

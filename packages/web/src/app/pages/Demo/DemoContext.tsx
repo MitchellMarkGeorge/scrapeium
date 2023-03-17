@@ -5,5 +5,9 @@ export interface DemoContextValues {
     setQuery: (query: string) => void
     html: string,
     setHtml: (html: string) => void
+    // outputLang: "json5" | "yaml"
+    // setOutputLang: (lang: "json5" | "yaml") => void;
+    // reset: () => void;
+    runQuery: () => void;
 }
 export const DemoContext = createContext<DemoContextValues | null>(null)

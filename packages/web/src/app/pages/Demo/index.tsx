@@ -14,12 +14,14 @@ import { useState } from 'react';
 import { Evaluator, Parser, ResultType } from '@scrapeium/lang';
 
 import { IoPlanet } from 'react-icons/io5';
-import { DemoContext } from '../components/DemoContext';
-import QueryEditor from '../components/QueryEditor';
-import HtmlEditor from '../components/HtmlEditor';
+import { DemoContext } from './DemoContext';
+import QueryEditor from './components/editors/QueryEditor';
+import HtmlEditor from './components/editors/HtmlEditor';
 import YAML from 'yaml';
-import ResultVeiwer from '../components/ResultVeiwer';
-import { goToDocs } from '../utils';
+import ResultVeiwer from './components/editors/ResultVeiwer';
+import { goToDocs } from '../../utils';
+import TopBar from './components/TopBar';
+import SplitPane from './components/SplitPane';
 
 export default function Demo() {
   const [outputLang, setOutputLang] = useState<'json5' | 'yaml'>('json5');
@@ -69,44 +71,35 @@ export default function Demo() {
   };
   // for some reason sometimes the editors can be slow... try monaco?
   return (
-    <DemoContext.Provider value={{ query, setQuery, html, setHtml }}>
+    <DemoContext.Provider
+      value={{
+        query,
+        setQuery,
+        html,
+        setHtml,
+        runQuery,
+      }}
+    >
       <Box height="100%" display="flex" flexDirection="column">
-        <Flex
-          minWidth="max-content"
-          padding="1rem"
-          alignItems="center"
-          gap="2"
-          backgroundColor="#ff914d"
-        >
-          <HStack>
-            <Icon as={IoPlanet} boxSize={10} color="white" />
-            <Heading color="white">Scrapeium Demo</Heading>
-          </HStack>
-          <Spacer />
-          <HStack>
-            <Select
-              value={outputLang}
-              bg="whiteAlpha"
-              onChange={selectOnChange}
-            >
-              <option value="json5">JSON</option>
-              {/* <option value="xml">XML</option> */}
-              <option value="yaml">YAML</option>
-            </Select>
-            <Button onClick={goToDocs}>Docs</Button>
-            <Button onClick={reset}>Reset</Button>
-            <Button onClick={runQuery}>Run</Button>
-          </HStack>
-        </Flex>
-        <Box flex={1} backgroundColor="#ff914d">
+        <TopBar />
+        <Box flex={1} backgroundColor="gray.900">
+          <SplitPane direction="vertical">
+            <SplitPane direction="horizontal">
+              <QueryEditor />
+              <HtmlEditor />
+            </SplitPane>
+              <ResultVeiwer output={output} />
+          </SplitPane>
+        </Box>
+        {/* <Box flex={1}  backgroundColor="gray.900" padding="1rem">
           <Grid
             height="100%"
             width="100%"
             templateRows="repeat(2, 1fr)"
             templateColumns="repeat(2, 1fr)"
-            paddingLeft="1rem"
-            paddingRight="1rem"
-            paddingBottom="1rem"
+            // paddingLeft="1rem"
+            // paddingRight="1rem"
+            // paddingBottom="1rem"
             gap={4}
           >
             <GridItem rowSpan={1} colSpan={1}>
@@ -119,7 +112,7 @@ export default function Demo() {
               <ResultVeiwer output={output} outputLang={outputLang} />
             </GridItem>
           </Grid>
-        </Box>
+        </Box> */}
       </Box>
     </DemoContext.Provider>
   );

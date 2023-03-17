@@ -1,4 +1,12 @@
 {
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
   "extends": "nx/presets/core.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "scrapeium",
@@ -7,14 +15,6 @@
   },
   "cli": {
     "defaultCollection": "@nrwl/react"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
-    }
   },
   "generators": {
     "@nrwl/react": {
@@ -32,5 +32,10 @@
       }
     }
   },
-  "defaultProject": "web"
+  "defaultProject": "web",
+  "targetDefaults": {
+    "test": {
+      "inputs": ["default", "^default"]
+    }
+  }
 }
