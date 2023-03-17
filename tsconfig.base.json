@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@scrapeium/codemirror": ["packages/codemirror-lang/src/index.ts"],
       "@scrapeium/lang": ["packages/lang/src/index.ts"]
     }
   },
