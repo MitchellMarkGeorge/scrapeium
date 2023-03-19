@@ -1,12 +1,6 @@
 import React from 'react';
-import AceEditor from 'react-ace';
-// import 'ace-builds/src-noconflict/theme-tomorrow';
-// import 'ace-builds/src-noconflict/mode-json5';
-// import 'ace-builds/src-noconflict/mode-yaml';
-// import 'ace-builds';
 import { Box } from '@chakra-ui/react';
 import ReactCodeMirror from '@uiw/react-codemirror';
-import { atomone } from '@uiw/codemirror-themes-all';
 import { json } from '@codemirror/lang-json';
 import { darkTheme } from './theme';
 // import 'ace-builds/webpack-resolver';

@@ -1,4 +1,4 @@
-import { codemirrorLang } from './codemirror-lang';
+import { codemirrorLang } from './scrapeium';
 
 describe('codemirrorLang', () => {
   it('should work', () => {

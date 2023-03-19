@@ -1,14 +1,9 @@
 import React, { useContext } from 'react';
-import AceEditor from 'react-ace';
-// import 'ace-builds/src-noconflict/theme-github';
-// import 'ace-builds/src-noconflict/theme-tomorrow';
-// import 'ace-builds';
-// import 'ace-builds/webpack-resolver';
 import { DemoContext, DemoContextValues } from '../../DemoContext';
 import { Box } from '@chakra-ui/react';
 import ReactCodeMirror from '@uiw/react-codemirror';
-import { atomone, atomoneInit } from '@uiw/codemirror-themes-all';
 import { darkTheme } from './theme';
+import { scrapeium } from '@scrapeium/codemirror';
 
 export default function QueryEditor() {
   const { query, setQuery } = useContext(DemoContext) as DemoContextValues;
@@ -26,6 +21,8 @@ export default function QueryEditor() {
         onChange={onChange}
         value={query}
         theme={darkTheme}
+        // for some reason using this extension causes issues...
+        extensions={[scrapeium()]}
         basicSetup={{
           highlightActiveLine: false,
           highlightActiveLineGutter: false

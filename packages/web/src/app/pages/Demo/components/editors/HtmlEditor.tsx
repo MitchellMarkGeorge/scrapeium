@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
-import AceEditor from 'react-ace';
 import { DemoContext, DemoContextValues } from '../../DemoContext';
 import { Box } from '@chakra-ui/react';
-import { atomone, atomoneInit } from '@uiw/codemirror-themes-all';
 import ReactCodeMirror from '@uiw/react-codemirror';
 import { html } from '@codemirror/lang-html';
 import { darkTheme } from './theme';

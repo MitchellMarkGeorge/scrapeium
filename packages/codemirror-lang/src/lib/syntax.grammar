@@ -1,0 +1,86 @@
+@detectDelim
+
+@top Query { block }
+
+@tokens {
+    space { @whitespace+ }
+    Comment { "//" ![\n]* }
+    underscore { "_" }
+    identifier { (@asciiLetter | underscore) (@asciiLetter | underscore)* }
+    VariableName { ":" identifier }
+    Key { identifier }
+    Integer { (@digit)+ }
+    "(" ")" "[" "]" "{" "}" ">" "="
+    String {
+        '"' (![\\\n']+)* '"'
+    }
+}
+
+@skip { space | Comment }
+
+block {
+    ArrayBlock |
+    ObjectBlock |
+    ExpressionBlock
+}
+
+ArrayBlock {
+    BlockPrefix "[" ObjectBlockNoPrefix | ExpressionBlockNoPrefix "]"
+}
+
+ObjectBlock {
+    BlockPrefix? ObjectBlockNoPrefix
+}
+
+ExpressionBlock {
+    BlockPrefix? ExpressionBlockNoPrefix
+}
+
+ObjectBlockNoPrefix {
+    "{" (Key "=" block)+ "}"
+}
+
+ExpressionBlockNoPrefix {
+   statement | "(" statement+ ")"
+}
+
+BlockPrefix {
+    String ">"
+}
+
+statement {
+    QueryStatement |
+    SelectStatement |
+    SelectChildStatement |
+    ReadStatement |
+    ReadAttributeStatement |
+    ToNumberStatement
+
+}
+
+QueryStatement {
+    @specialize[@name=query]<identifier, "query"> String
+}
+
+SelectStatement {
+    @specialize[@name=select]<identifier, "select"> VariableName
+}
+
+SelectChildStatement {
+    @specialize[@name=select_child]<identifier, "select_child"> Integer
+}
+
+ReadStatement {
+    @specialize[@name=read]<identifier, "read"> VariableName
+}
+
+ReadAttributeStatement {
+    @specialize[@name=read_attribute]<identifier, "read_attribute"> String
+}
+
+ToNumberStatement {
+    @specialize[@name=to_number]<identifier, "to_number"> VariableName
+}
+
+
+
