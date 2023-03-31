@@ -14,7 +14,7 @@ export const parser = LRParser.deserialize({
   ],
   skippedNodes: [0,1],
   repeatNodeCount: 2,
-  tokenData: "'b~RiX^!ppq!prs#exy$uyz$z!P!Q%P!Q![%n![!]%v!_!`&b!`!a&g!c!}&l!}#O&|#P#Q'R#R#S&l#T#o&l#o#p'W#q#r']#y#z!p$f$g!p#BY#BZ!p$IS$I_!p$I|$JO!p$JT$JU!p$KV$KW!p&FU&FV!p~!uYu~X^!ppq!p#y#z!p$f$g!p#BY#BZ!p$IS$I_!p$I|$JO!p$JT$JU!p$KV$KW!p&FU&FV!p~#hWOY#eZr#ers$Qsw#ex#O#e#P;'S#e;'S;=`$o<%lO#e~$VWU~OY#eZr#ers$Qsw#ex#O#e#P;'S#e;'S;=`$o<%lO#e~$rP;=`<%l#e~$zOl~~%POm~~%SP!P!Q%V~%[SP~OY%VZ;'S%V;'S;=`%h<%lO%V~%kP;=`<%l%V~%sPe~!Q![%n~%yR!c!}&S#R#S&S#T#o&S~&XRb~!c!}&S#R#S&S#T#o&S~&gO[~~&lOS~R&sRZQxP!c!}&l#R#S&l#T#o&l~'ROV~~'WOn~~']OX~~'bOW~",
+  tokenData: "'[~RiX^!ppq!prs#est$uxy%^yz%c!Q![%h![!]%p!_!`&[!`!a&a!c!}&f!}#O&v#P#Q&{#R#S&f#T#o&f#o#p'Q#q#r'V#y#z!p$f$g!p#BY#BZ!p$IS$I_!p$I|$JO!p$JT$JU!p$KV$KW!p&FU&FV!p~!uYu~X^!ppq!p#y#z!p$f$g!p#BY#BZ!p$IS$I_!p$I|$JO!p$JT$JU!p$KV$KW!p&FU&FV!p~#hWOY#eZr#ers$Qsw#ex#O#e#P;'S#e;'S;=`$o<%lO#e~$VWU~OY#eZr#ers$Qsw#ex#O#e#P;'S#e;'S;=`$o<%lO#e~$rP;=`<%l#e~$zSP~OY$uZ;'S$u;'S;=`%W<%lO$u~%ZP;=`<%l$u~%cOl~~%hOm~~%mPe~!Q![%h~%sR!c!}%|#R#S%|#T#o%|~&RRb~!c!}%|#R#S%|#T#o%|~&aO[~~&fOS~R&mRZQxP!c!}&f#R#S&f#T#o&f~&{OV~~'QOn~~'VOX~~'[OW~",
   tokenizers: [0, 1],
   topRules: {"Query":[0,2]},
   specialized: [{term: 40, get: value => spec_identifier[value] || -1}],

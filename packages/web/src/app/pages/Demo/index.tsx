@@ -12,7 +12,7 @@ import SplitPane from './components/SplitPane';
 import dedent from 'ts-dedent';
 
 const INITAL_QUERY = dedent`
-  // Here is where you write your Scrapeium queries. Oh look, syntax highlighting!
+  # Here is where you write your Scrapeium queries. Oh look, syntax highlighting!
   "#age" > read :inner_text
 `;
 

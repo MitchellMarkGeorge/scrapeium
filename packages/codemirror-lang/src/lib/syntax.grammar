@@ -4,7 +4,7 @@
 
 @tokens {
     space { @whitespace+ }
-    Comment { "//" ![\n]* }
+    Comment { "#" ![\n]* }
     underscore { "_" }
     identifier { (@asciiLetter | underscore) (@asciiLetter | underscore)* }
     VariableName { ":" identifier }

@@ -31,8 +31,6 @@ export default function TopBar() {
       gap="2"
       //   backgroundColor="#ff914d"
       backgroundColor="gray.900"
-      borderBottom="1px"
-      borderColor="gray.700"
     >
       <HStack onClick={goHome} cursor="pointer">
         <Icon as={IoPlanet} boxSize={10} color="white" />
